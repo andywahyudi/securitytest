@@ -1,0 +1,158 @@
+# Web Application Security Testing Tool Configuration
+
+scanning:
+  max_depth: 3
+  delay_between_requests: 0.2
+  request_timeout: 15
+  max_concurrent_requests: 10
+  follow_redirects: true
+  verify_ssl: false
+  user_agent: "SecurityTester/1.0"
+  
+authentication:
+  retry_attempts: 3
+  session_timeout: 3600
+  maintain_session: true
+  export_session: true
+  session_export_path: "sessions/"
+  
+  # Common authentication patterns
+  common_login_paths:
+    - "/login"
+    - "/admin"
+    - "/admin.php"
+    - "/administrator"
+    - "/wp-admin"
+    - "/login.php"
+    - "/signin"
+  
+  # Common credential combinations for testing
+  test_credentials:
+    - username: "admin"
+      password: "admin"
+    - username: "admin"
+      password: "password"
+    - username: "administrator"
+      password: "administrator"
+    - username: "root"
+      password: "root"
+
+xss_testing:
+  enabled: true
+  payloads_file: "payloads/xss_payloads.txt"
+  custom_payloads:
+    - "<script>alert('XSS')</script>"
+    - "javascript:alert('XSS')"
+    - "<img src=x onerror=alert('XSS')>"
+  
+  test_parameters:
+    - "q"
+    - "search"
+    - "query"
+    - "name"
+    - "comment"
+    - "message"
+  
+  test_all_parameters: true
+  test_headers: true
+  test_cookies: true
+  encoding_tests: true
+  
+  # XSS detection patterns
+  detection_patterns:
+    - "alert('XSS')"
+    - "alert(\"XSS\")"
+    - "javascript:alert"
+    - "<script>"
+    - "onerror="
+
+csrf_testing:
+  enabled: true
+  test_token_absence: true
+  test_token_prediction: true
+  test_referer_bypass: true
+  test_origin_bypass: true
+  test_method_override: true
+  
+  # CSRF token names to look for
+  token_names:
+    - "csrf_token"
+    - "_token"
+    - "authenticity_token"
+    - "csrfmiddlewaretoken"
+    - "_csrf"
+
+session_testing:
+  enabled: true
+  test_fixation: true
+  test_timeout: true
+  test_concurrent: true
+  test_regeneration: true
+  test_logout: true
+  
+  # Session cookie names
+  session_cookies:
+    - "PHPSESSID"
+    - "JSESSIONID"
+    - "SESSIONID"
+    - "session_id"
+    - "sid"
+
+privilege_testing:
+  enabled: true
+  admin_paths:
+    - "/admin"
+    - "/administrator"
+    - "/manage"
+    - "/control"
+    - "/dashboard/admin"
+    - "/panel"
+    - "/backend"
+  
+  admin_indicators:
+    - "delete user"
+    - "manage users"
+    - "system settings"
+    - "admin panel"
+    - "user management"
+    - "system configuration"
+
+auth_bypass_testing:
+  enabled: true
+  test_direct_access: true
+  test_method_bypass: true
+  test_header_manipulation: true
+  test_url_manipulation: true
+  
+  bypass_headers:
+    - "X-Forwarded-For: 127.0.0.1"
+    - "X-Real-IP: 127.0.0.1"
+    - "X-Originating-IP: 127.0.0.1"
+    - "X-Remote-IP: 127.0.0.1"
+    - "X-Client-IP: 127.0.0.1"
+    - "X-Forwarded-Host: localhost"
+    - "Referer: http://localhost/admin"
+
+reporting:
+  include_screenshots: false
+  include_request_response: true
+  include_curl_commands: true
+  severity_threshold: "Low"
+  export_formats:
+    - "markdown"
+    - "json"
+    - "html"
+  
+  # Report customization
+  company_name: "Security Testing Team"
+  report_template: "default"
+  include_executive_summary: true
+  include_technical_details: true
+  include_remediation: true
+
+output:
+  verbose: false
+  log_level: "INFO"
+  log_file: "security_test.log"
+  progress_bar: true
+  colored_output: true
