@@ -46,8 +46,8 @@ pip install pillow    # For screenshot capabilities
 
 ### Installation
 ```bash
-git clone https://github.com/your-repo/security-tester.git
-cd security-tester
+git clone https://github.com/andywahyudi/securitytest.git
+cd securitytest
 pip install -r requirements.txt
 ```
 
@@ -388,8 +388,8 @@ tail -f security_test.log
 
 ### Development Setup
 ```bash
-git clone https://github.com/your-repo/security-tester.git
-cd security-tester
+git clone https://github.com/andywahyudi/securitytest.git
+cd securitytest
 python3 -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
@@ -524,11 +524,11 @@ setup(
     name="web-security-tester",
     version="2.0.0",
     author="Security Testing Team",
-    author_email="security@example.com",
+    author_email="me@andywahyudi.com",
     description="Enhanced Web Application Security Testing Tool with Advanced Authentication Support",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/your-repo/security-tester",
+    url="https://github.com/andywahyudi/securitytest",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 4 - Beta",
