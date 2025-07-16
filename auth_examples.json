@@ -1,0 +1,86 @@
+{
+  "examples": {
+    "form_based_simple": {
+      "type": "form",
+      "login_url": "http://example.com/login.php",
+      "username": "admin",
+      "password": "password",
+      "username_field": "username",
+      "password_field": "password"
+    },
+    
+    "form_based_with_csrf": {
+      "type": "form",
+      "login_url": "http://example.com/login.php",
+      "username": "admin",
+      "password": "password",
+      "username_field": "email",
+      "password_field": "pwd",
+      "csrf_token_name": "_token"
+    },
+    
+    "basic_auth": {
+      "type": "basic",
+      "url": "http://example.com/protected",
+      "username": "admin",
+      "password": "secret"
+    },
+    
+    "cookie_based": {
+      "type": "cookies",
+      "cookies": "PHPSESSID=abc123def456;user_token=xyz789;admin_flag=true"
+    },
+    
+    "header_based_jwt": {
+      "type": "headers",
+      "headers": "Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...,X-API-Key:your-api-key"
+    },
+    
+    "multi_step_auth": {
+      "type": "multi_step",
+      "steps": [
+        {
+          "url": "http://example.com/login",
+          "method": "POST",
+          "data": {
+            "username": "admin",
+            "password": "password"
+          }
+        },
+        {
+          "url": "http://example.com/verify-2fa",
+          "method": "POST",
+          "data": {
+            "token": "123456"
+          }
+        }
+      ]
+    },
+    
+    "oauth_simulation": {
+      "type": "oauth",
+      "authorization_url": "http://example.com/oauth/authorize",
+      "token_url": "http://example.com/oauth/token",
+      "client_id": "your_client_id",
+      "client_secret": "your_client_secret",
+      "redirect_uri": "http://localhost:8080/callback"
+    },
+    
+    "session_based": {
+      "type": "session",
+      "login_url": "http://example.com/login",
+      "username": "user@example.com",
+      "password": "userpass",
+      "session_cookie": "SESSIONID",
+      "maintain_session": true
+    }
+  },
+  
+  "usage_instructions": {
+    "command_line": [
+      "python3 main.py --auth '{\"type\":\"form\",\"login_url\":\"http://localhost:8080/admin.php\",\"username\":\"admin\",\"password\":\"password\"}' --all http://localhost:8080",
+      "python3 main.py --login-url http://localhost:8080/admin.php --username admin --password password --session --privilege http://localhost:8080",
+      "python3 main.py --cookies 'PHPSESSID=abc123;admin=true' --xss --csrf http://localhost:8080"
+    ]
+  }
+}
