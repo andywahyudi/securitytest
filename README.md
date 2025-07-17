@@ -2,7 +2,7 @@
 
 A comprehensive Python-based security testing tool for web applications with advanced authentication support, session management testing, and multiple vulnerability detection capabilities.
 
-## 🚀 Features
+## Features
 
 ### Core Functionality
 - **XSS Detection**: Comprehensive Cross-Site Scripting vulnerability detection
@@ -27,7 +27,7 @@ A comprehensive Python-based security testing tool for web applications with adv
 - **Technical Details**: In-depth technical findings
 - **Remediation Guidance**: Specific fix recommendations
 
-## 📦 Installation
+## Installation
 
 ### Prerequisites
 - Python 3.7+
@@ -73,7 +73,7 @@ cd securitytest
 pip install -r requirements.txt
 ```
 
-## 🔧 Configuration
+## Configuration
 
 ### Configuration File
 Create a YAML configuration file to customize testing parameters:
@@ -101,7 +101,7 @@ reporting:
       - "html"
 ```
 
-## 🚀 Usage
+## Usage
 
 ### Basic Usage
 
@@ -262,7 +262,7 @@ python3 enhanced_main.py \
 - **Header Manipulation**: Authentication header bypass
 - **URL Manipulation**: Path traversal and manipulation
 
-## 📊 Report Formats
+## Report Formats
 
 ### Markdown Report
 ```bash
@@ -300,7 +300,7 @@ python3 enhanced_main.py --all --format csv --output report http://example.com
 - Bulk processing
 - Filtering and sorting
 
-## 🛠️ Development & Testing
+## Development & Testing
 
 ### Running Tests
 ```bash
@@ -359,7 +359,7 @@ xss_testing:
     - "<svg onload=alert('SVG XSS')>"
 ```
 
-## 🔒 Security Considerations
+## Security Considerations
 
 ### Responsible Usage
 - **Authorization Required**: Only test applications you own or have explicit permission to test
@@ -373,7 +373,7 @@ xss_testing:
 - **Monitor Impact**: Monitor application performance during testing
 - **Document Findings**: Maintain detailed records of testing activities
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -413,7 +413,7 @@ python3 enhanced_main.py --verbose --all http://example.com 2>&1 | tee debug.log
 tail -f security_test.log
 ```
 
-## 🤝 Contributing
+## Contributing
 
 ### Development Setup
 ```bash
@@ -451,21 +451,21 @@ mypy modules/ *.py
 ## Credits
 1. [XSS Payload List](https://github.com/payloadbox/xss-payload-list)
 
-## 📝 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## ⚠️ Disclaimer
+## Disclaimer
 
 This tool is intended for educational and authorized security testing purposes only. Users are responsible for ensuring they have proper authorization before testing any web application. The authors are not responsible for any misuse or damage caused by this tool.
 
-## 🆘 Support
+## Support
 
 ### Getting Help
 - **Issues**: Report bugs and request features on GitHub Issues
 - **Documentation**: Check this README and inline code documentation
 
-## 🔄 Changelog
+## Changelog
 
 ### Version 2.0.0
 - Added advanced authentication support
@@ -481,7 +481,7 @@ This tool is intended for educational and authorized security testing purposes o
 - Simple authentication support
 - Markdown reporting
 
-## 🎯 Roadmap
+## Roadmap
 
 ### Upcoming Features
 - **SQL Injection Detection**: Comprehensive SQLi testing
@@ -500,7 +500,7 @@ This tool is intended for educational and authorized security testing purposes o
 
 ---
 
-**Happy Security Testing! 🔒**
+**Happy Security Testing**
 Now let's create a requirements file:
 
 ```text:security_tester/requirements.txt
