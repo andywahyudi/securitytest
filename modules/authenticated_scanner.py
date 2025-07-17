@@ -168,7 +168,7 @@ class AuthenticatedScanner:
             
         except Exception as e:
             logging.error(f"Error testing session timeout: {e}")
-                        return None
+            return None
     
     def test_concurrent_sessions(self, base_url):
         """Test if multiple concurrent sessions are allowed"""

@@ -85,9 +85,16 @@ class TestConfig:
     
     def get(self, section, key=None, default=None):
         """Get configuration value"""
-        if key is None:
-            return self.config.get(section, default)
-        return self.config.get(section, {}).get(key, default)
+        # Handle the case where get is called with (section, default_dict)
+        if key is not None and isinstance(key, dict) and default is None:
+            # This means get('section', {}) was called
+            return self.config.get(section, key)
+        elif key is None:
+            # This means get('section') was called
+            return self.config.get(section, default if default is not None else {})
+        else:
+            # This means get('section', 'key', default) was called
+            return self.config.get(section, {}).get(key, default)
     
     def set(self, section, key, value):
         """Set configuration value"""

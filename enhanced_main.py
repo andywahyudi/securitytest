@@ -13,6 +13,7 @@ from modules.xss_scanner import XSSScanner
 from modules.csrf_scanner import CSRFScanner
 from modules.crawler import WebCrawler
 from modules.enhanced_reporter import EnhancedReporter
+# from modules.reporter import Reporter as EnhancedReporter
 from modules.advanced_auth import AdvancedAuthHandler
 from modules.authenticated_scanner import AuthenticatedScanner
 from modules.test_config import TestConfig
@@ -280,7 +281,7 @@ Authentication Examples:
     crawler = WebCrawler(session=session)
     
     # Configure crawler from config
-    crawler_config = config.get('scanning', {})
+    crawler_config = config.get('scanning', default={})
     max_depth = crawler_config.get('max_depth', 2)
     delay = crawler_config.get('delay_between_requests', 0.1)
     
@@ -412,7 +413,8 @@ Authentication Examples:
             elif format_type == 'csv':
                 report_content = reporter.generate_csv_report(results, target_url, auth_info)
             else:  # markdown (default)
-                report_content = reporter.generate_authenticated_report(results, target_url, auth_info)
+                # report_content = reporter.generate_authenticated_report(results, target_url, auth_info)
+                report_content = reporter.generate_report(results, target_url)
             
             # Save report if output specified
             if args.output:

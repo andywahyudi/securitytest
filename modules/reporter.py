@@ -37,21 +37,22 @@ class Reporter:
         
         # Count vulnerabilities by severity
         for test_type, vulns in results.items():
-            total_vulns += len(vulns)
-            for vuln in vulns:
-                severity = vuln.get('severity', 'Low')
-                if severity == 'High':
-                    high_vulns += 1
-                elif severity == 'Medium':
-                    medium_vulns += 1
-                else:
-                    low_vulns += 1
+            if isinstance(vulns, list):
+                total_vulns += len(vulns)
+                for vuln in vulns:
+                    severity = vuln.get('severity', 'Low')
+                    if severity == 'High':
+                        high_vulns += 1
+                    elif severity == 'Medium':
+                        medium_vulns += 1
+                    else:
+                        low_vulns += 1
         
-        # Generate sections
-        executive_summary = self.generate_executive_summary(high_vulns, medium_vulns, low_vulns)
-        detailed_findings = self.generate_detailed_findings(results)
-        recommendations = self.generate_recommendations(results)
-        technical_details = self.generate_technical_details(results, target_url)
+        # Generate sections - ensure they return strings, not None
+        executive_summary = self.generate_executive_summary(high_vulns, medium_vulns, low_vulns) or ""
+        detailed_findings = self.generate_detailed_findings(results) or ""
+        recommendations = self.generate_recommendations(results) or ""
+        technical_details = self.generate_technical_details(results) or ""
         
         # Fill template
         report = self.report_template.format(
@@ -199,36 +200,13 @@ This security assessment identified {total} vulnerabilities:
     
     def generate_recommendations(self, results):
         """Generate recommendations section"""
-        if not any(results.values()):
-            return """
-### General Security Recommendations
-
-Even though no vulnerabilities were found, consider implementing these security best practices:
-
-1. **Regular Security Testing:**
-   - Implement automated security testing in CI/CD pipeline
-   - Conduct regular penetration testing
-   - Keep dependencies updated
-
-2. **Security Headers:**
-   ```php
-   header('X-Content-Type-Options: nosniff');
-   header('X-Frame-Options: DENY');
-   header('X-XSS-Protection: 1; mode=block');
-   header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
-   header('Content-Security-Policy: default-src \\'self\\'');
-```
-
-3. **Developer Training:**
-   - Train developers on secure coding practices
-   - Implement code review processes
-   - Use static analysis tools """
-
-recommendations = ""
-
-has_xss = 'xss' in results and results['xss'] has_csrf = 'csrf' in results and results['csrf']
-
-if has_xss: recommendations += """
+        recommendations = ""
+        
+        has_xss = 'xss' in results and results['xss']
+        has_csrf = 'csrf' in results and results['csrf']
+        
+        if has_xss:
+            recommendations += """
 
 ### XSS Prevention
 1. **Input Validation:**
@@ -247,7 +225,7 @@ if has_xss: recommendations += """
    - Use nonce or hash-based CSP for inline scripts
    - Regularly review and update CSP rules
    - PHP Specific Implementation:
-   ```php
+   
     // Use htmlspecialchars() for HTML context
     echo htmlspecialchars($user_input, ENT_QUOTES, 'UTF-8');
 
@@ -271,10 +249,10 @@ if has_xss: recommendations += """
                 return htmlspecialchars($input, ENT_QUOTES, 'UTF-8');
         }
     }
-    ```
+    
     """
         if has_csrf:
-        recommendations += """
+            recommendations += """
 CSRF Prevention
 CSRF Tokens:
 
@@ -292,7 +270,7 @@ Double Submit Cookie Pattern:
 Send CSRF token both as cookie and form field
 Validate that both values match on server-side
 PHP Implementation:
-```php
+
 // Start session with secure settings
 session_set_cookie_params([
     'lifetime' => 3600,
@@ -335,7 +313,8 @@ if ($_POST) {
     }
     // Process form data safely
 }
-```
+
+
 Additional CSRF Protection:
 
 Validate HTTP Referer header for sensitive operations
@@ -343,11 +322,12 @@ Use custom headers for AJAX requests
 Implement request rate limiting
 Log and monitor CSRF attempts
 """
-    recommendations += """
+        recommendations += """
 
 General Security Recommendations
 1. Security Headers:
-```php
+
+
 // Implement comprehensive security headers
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: DENY');
@@ -356,10 +336,12 @@ header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
 header('Content-Security-Policy: default-src \\'self\\'; script-src \\'self\\'');
 header('Referrer-Policy: strict-origin-when-cross-origin');
 header('Permissions-Policy: geolocation=(), microphone=(), camera=()');
-```
+
+
 
 2. Input Validation Framework:
-```php
+
+
 class InputValidator {
     public static function sanitize($input, $type = 'string') {
         $input = trim($input);
@@ -390,7 +372,8 @@ class InputValidator {
         }
     }
 }
-```
+
+
 
 3. **Regular Security Practices:**
    - Implement automated security testing in CI/CD pipeline
@@ -407,7 +390,8 @@ class InputValidator {
    - Establish secure development lifecycle (SDLC)
 
 5. **Database Security:**
-   ```php
+
+   
    // Use prepared statements to prevent SQL injection
    $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ? AND status = ?");
    $stmt->execute([$user_id, 'active']);
@@ -420,9 +404,11 @@ class InputValidator {
        }
        return $input;
    }
-```
+
+
 6. **Session Security:**
-```php
+
+
 // Secure session configuration
 ini_set('session.cookie_httponly', 1);
 ini_set('session.cookie_secure', 1);
@@ -445,112 +431,139 @@ function checkSessionTimeout($timeout = 1800) {
     $_SESSION['last_activity'] = time();
     return true;
 }
-```
+
 """
-    return recommendations
 
-def generate_technical_details(self, results, target_url):
+
+def generate_technical_details(self, results, auth_info=None):
     """Generate technical details section"""
-    details = "### Test Configuration\n\n"
-    details += f"- **Target URL:** {target_url}\n"
-    details += f"- **Test Date:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
-    details += f"- **Test Types:** {', '.join(results.keys())}\n"
+
+
+
+
+    details = f"""
+### Scan Information
+
+- **Scan Date:** {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+- **Scanner Version:** Enhanced Security Scanner v2.0
+- **Total Vulnerabilities:** {sum(len(v) if isinstance(v, list) else 0 for v in results.values())}
+
+### Vulnerability Distribution
+"""
     
-    # Count total endpoints tested
-    total_endpoints = 0
-    for test_type, vulns in results.items():
-        unique_endpoints = set()
-        for vuln in vulns:
-            unique_endpoints.add(vuln.get('endpoint', 'unknown'))
-        total_endpoints += len(unique_endpoints)
+
+
+
+
+
+
+
+    for vuln_type, vulns in results.items():
+        if isinstance(vulns, list) and vulns:
+            details += f"- **{vuln_type.upper()}:** {len(vulns)} vulnerabilities\n"
     
-    details += f"- **Total Endpoints Tested:** {total_endpoints}\n"
-    details += f"- **Total Vulnerabilities Found:** {sum(len(vulns) for vulns in results.values())}\n\n"
-    
-    # Add vulnerability breakdown
-    details += "### Vulnerability Breakdown\n\n"
-    for test_type, vulns in results.items():
-        if vulns:
-            details += f"**{test_type.upper()} Vulnerabilities:** {len(vulns)}\n"
-            
-            # Count by severity
-            severity_count = {'High': 0, 'Medium': 0, 'Low': 0}
-            for vuln in vulns:
-                severity = vuln.get('severity', 'Low')
-                severity_count[severity] += 1
-            
-            for severity, count in severity_count.items():
-                if count > 0:
-                    details += f"  - {severity}: {count}\n"
-            details += "\n"
-    
-    # Add testing methodology
-    details += "### Testing Methodology\n\n"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     details += """
-XSS Testing:
 
-Endpoint Discovery: Crawled application to find forms and parameters
-Payload Injection: Tested various XSS payloads in different contexts
-Response Analysis: Analyzed responses for successful payload execution
-Context Detection: Identified injection context (HTML, JavaScript, etc.)
-CSRF Testing:
+### Testing Methodology
 
-Form Analysis: Identified state-changing forms and operations
-Token Validation: Tested presence and validation of CSRF tokens
-Bypass Testing: Attempted to bypass CSRF protections
-Header Validation: Tested Referer and Origin header validation
-Crawling Parameters:
 
-Maximum depth: 2 levels
 
-Request timeout: 10 seconds
 
-Rate limiting: 0.1 seconds between requests """
-  # Add raw results
-  details += "### Raw Test Results (JSON)\n\n"
-  details += "```json\n"
-  
-  # Clean up results for JSON serialization
-  clean_results = {}
-  for test_type, vulns in results.items():
-      clean_results[test_type] = []
-      for vuln in vulns:
-          clean_vuln = {}
-          for key, value in vuln.items():
-              # Convert non-serializable objects to strings
-              if isinstance(value, (str, int, float, bool, list, dict, type(None))):
-                  clean_vuln[key] = value
-              else:
-                  clean_vuln[key] = str(value)
-          clean_results[test_type].append(clean_vuln)
-  
-  details += json.dumps(clean_results, indent=2, ensure_ascii=False)
-  details += "\n```\n\n"
-  
-  # Add tool information
-  details += "### Tool Information\n\n"
-  details += "- **Tool Name:** Web Application Security Testing Tool\n"
-  details += "- **Version:** 1.0.0\n"
-  details += "- **Test Types:** XSS (Reflected, Stored, DOM-based), CSRF\n"
-  details += "- **Target Applications:** PHP Web Applications\n"
-  details += "- **Detection Method:** Automated payload injection and response analysis\n\n"
-  
-  # Add disclaimer
-  details += "### Important Notes\n\n"
-  details += """
-Limitations:
 
-This tool focuses specifically on XSS and CSRF vulnerabilities
-Some complex authentication mechanisms may not be fully supported
-Manual verification of findings is recommended
-False positives may occur and require manual validation
-Recommendations:
 
-Combine automated testing with manual security assessment
-Perform regular security testing throughout development lifecycle
-Consider additional vulnerability types not covered by this tool
-Implement comprehensive security monitoring and logging
-Legal Notice: This tool should only be used on applications you own or have explicit permission to test. Unauthorized security testing may violate laws and regulations. """
+1. **Discovery Phase**
+   - Web crawling and endpoint discovery
+   - Form and parameter identification
+   - Common vulnerability scanning
+
+
+
+
+
+
+2. **Vulnerability Testing**
+   - Automated payload injection
+   - Response analysis and validation
+   - Context-aware testing
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+3. **Reporting**
+   - Risk assessment and prioritization
+   - Detailed technical findings
+   - Remediation recommendations
+"""
+    
     return details
 
 def save_report(self, report_content, filename=None):

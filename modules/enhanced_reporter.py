@@ -269,7 +269,7 @@ Normalize URLs before processing
 Implement proper URL validation
 Use whitelist-based URL routing
 """
-    return recommendations
+        return recommendations
 
 def generate_json_report(self, results, target_url, auth_info=None):
     """Generate JSON format report"""
@@ -324,17 +324,17 @@ def generate_html_report(self, results, target_url, auth_info=None):
 </html>
 """
         
-        # Calculate vulnerability counts
-        total_vulns = sum(len(vulns) if isinstance(vulns, list) else 0 for vulns in results.values())
-        high_vulns = sum(1 for vulns in results.values() if isinstance(vulns, list) for vuln in vulns if vuln.get('severity') == 'High')
-        medium_vulns = sum(1 for vulns in results.values() if isinstance(vulns, list) for vuln in vulns if vuln.get('severity') == 'Medium')
-        low_vulns = sum(1 for vulns in results.values() if isinstance(vulns, list) for vuln in vulns if vuln.get('severity') == 'Low')
-        
-        # Generate authentication section
-        auth_section = ""
-        if auth_info and auth_info.get('logged_in'):
-            auth_section = f"""
-    <div class="auth-info">
+    # Calculate vulnerability counts
+    total_vulns = sum(len(vulns) if isinstance(vulns, list) else 0 for vulns in results.values())
+    high_vulns = sum(1 for vulns in results.values() if isinstance(vulns, list) for vuln in vulns if vuln.get('severity') == 'High')
+    medium_vulns = sum(1 for vulns in results.values() if isinstance(vulns, list) for vuln in vulns if vuln.get('severity') == 'Medium')
+    low_vulns = sum(1 for vulns in results.values() if isinstance(vulns, list) for vuln in vulns if vuln.get('severity') == 'Low')
+    
+    # Generate authentication section
+    auth_section = ""
+    if auth_info and auth_info.get('logged_in'):
+        auth_section = f"""
+<div class="auth-info">
         <h3>Authentication Information</h3>
         <p><strong>Login URL:</strong> {auth_info.get('login_url', 'N/A')}</p>
         <p><strong>Session Cookies:</strong> {len(auth_info.get('cookies', []))}</p>
