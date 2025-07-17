@@ -33,9 +33,31 @@ A comprehensive Python-based security testing tool for web applications with adv
 - Python 3.7+
 - pip package manager
 
+### Setup using Virtual Environment
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
 ### Required Dependencies
 ```bash
 pip install requests beautifulsoup4 lxml pyyaml colorama tqdm
+```
+if it failed, check your python version.
+```bash
+python --version
+```
+or
+```bash
+python3 --version
+```
+another solution is using python3
+```bash
+python3 -m pip install requests beautifulsoup4 lxml pyyaml colorama tqdm
+```
+or
+```bash
+pip3 install requests beautifulsoup4 lxml pyyaml colorama tqdm
 ```
 
 ### Optional Dependencies
