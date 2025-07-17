@@ -17,15 +17,15 @@ A comprehensive Python-based security testing tool for web applications with adv
 - **Cookie-based Authentication**: Session cookie authentication
 - **Header-based Authentication**: Custom header authentication (Bearer tokens, etc.)
 - **Multi-step Authentication**: Complex authentication flows
-- **OAuth Simulation**: OAuth 2.0 flow simulation
-- **Session Import/Export**: Save and reuse authentication sessions
+- **OAuth Simulation**: OAuth 2.0 flow simulation (In-Progress)
+- **Session Import/Export**: Save and reuse authentication sessions (In-Testing)
 
 ### Reporting & Output
-- **Multiple Formats**: Markdown, JSON, HTML, CSV reports
-- **Detailed Analysis**: Comprehensive vulnerability analysis
-- **Executive Summaries**: High-level security assessment summaries
-- **Technical Details**: In-depth technical findings
-- **Remediation Guidance**: Specific fix recommendations
+- **Multiple Formats**: Markdown, JSON, HTML, CSV reports  (In-Testing)
+- **Detailed Analysis**: Comprehensive vulnerability analysis (To Do)
+- **Executive Summaries**: High-level security assessment summaries (To Do)
+- **Technical Details**: In-depth technical findings (To Do)
+- **Remediation Guidance**: Specific fix recommendations (To Do)
 
 ## Installation
 
@@ -323,9 +323,9 @@ security_tester/
 │   ├── csrf_scanner.py           # CSRF vulnerability detection
 │   ├── csrf_tester.py            # CSRF testing
 │   ├── crawler.py                # Web application crawler
-|.  ├── enhanced_reporter.py      # Multi-format report generation
-|.  ├── reporter.py               # Basic report generation
-|.  ├── scanner.py                # Vulnerability scanning
+|   ├── enhanced_reporter.py      # Multi-format report generation
+|   ├── reporter.py               # Basic report generation
+|   ├── scanner.py                # Vulnerability scanning
 │   ├── advanced_auth.py          # Advanced authentication handler
 │   └── test_config.py            # Configuration management
 │   ├── xss_scanner.py            # XSS vulnerability detection
