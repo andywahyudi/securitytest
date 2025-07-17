@@ -316,21 +316,28 @@ python3 test_runner.py --scanning-only
 ### Project Structure
 ```
 security_tester/
-├── enhanced_main.py          # Main application entry point
+├── enhanced_main.py              # Main application entry point
 ├── modules/
-│   ├── xss_scanner.py        # XSS vulnerability detection
-│   ├── csrf_scanner.py       # CSRF vulnerability detection
-│   ├── crawler.py            # Web application crawler
-│   ├── advanced_auth.py      # Advanced authentication handler
-│   ├── authenticated_scanner.py # Authenticated vulnerability scanning
-│   ├── enhanced_reporter.py  # Multi-format report generation
-│   └── test_config.py        # Configuration management
+│   ├── auth_handler.py           # Authentication handler
+│   ├── authenticated_scanner.py  # Authenticated vulnerability scanning
+│   ├── csrf_scanner.py           # CSRF vulnerability detection
+│   ├── csrf_tester.py            # CSRF testing
+│   ├── crawler.py                # Web application crawler
+|.  ├── enhanced_reporter.py      # Multi-format report generation
+|.  ├── reporter.py               # Basic report generation
+|.  ├── scanner.py                # Vulnerability scanning
+│   ├── advanced_auth.py          # Advanced authentication handler
+│   └── test_config.py            # Configuration management
+│   ├── xss_scanner.py            # XSS vulnerability detection
+│   ├── xss_tester.py             # XSS testing
 ├── config/
 │   └── default_config.yml    # Default configuration
 ├── payloads/
 │   ├── xss_payloads.txt      # XSS test payloads
-│   └── csrf_payloads.txt     # CSRF test payloads
+├── enhanced_main.py          # Main application entry point
+├── main.py                   # Main application entry point
 ├── test_runner.py            # Automated test suite
+├── requirements.txt          # Project dependencies
 └── README.md                 # This file
 ```
 
@@ -441,6 +448,9 @@ mypy modules/ *.py
 5. Run the test suite
 6. Submit a pull request
 
+## Credits
+1. [XSS Payload List](https://github.com/payloadbox/xss-payload-list)
+
 ## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -454,10 +464,6 @@ This tool is intended for educational and authorized security testing purposes o
 ### Getting Help
 - **Issues**: Report bugs and request features on GitHub Issues
 - **Documentation**: Check this README and inline code documentation
-- **Community**: Join discussions in GitHub Discussions
-
-### Reporting Security Issues
-If you discover security vulnerabilities in this tool itself, please report them responsibly by emailing security@example.com instead of creating public issues.
 
 ## 🔄 Changelog
 
