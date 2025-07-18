@@ -209,8 +209,11 @@ Authentication Examples:
     
     # Output report
     if args.output:
+        output_path = args.output
+        if not output_path.startswith("output/"):
+            output_path = f"output/{output_path}"
         try:
-            filename = reporter.save_report(report_content, args.output)
+            filename = reporter.save_report(report_content, output_path)
             print(f"📄 Report saved to: {filename}")
         except Exception as e:
             print(f"❌ Failed to save report: {e}")

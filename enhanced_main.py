@@ -12,8 +12,8 @@ from pathlib import Path
 from modules.xss_scanner import XSSScanner
 from modules.csrf_scanner import CSRFScanner
 from modules.crawler import WebCrawler
-from modules.enhanced_reporter import EnhancedReporter
-# from modules.reporter import Reporter as EnhancedReporter
+# from modules.enhanced_reporter import EnhancedReporter
+from modules.reporter import Reporter as EnhancedReporter
 from modules.advanced_auth import AdvancedAuthHandler
 from modules.authenticated_scanner import AuthenticatedScanner
 from modules.test_config import TestConfig
@@ -419,11 +419,24 @@ Authentication Examples:
             # Save report if output specified
             if args.output:
                 filename = f"{args.output}.{format_type}" if format_type != 'markdown' else f"{args.output}.md"
-                saved_filename = reporter.save_report(report_content, filename, format_type)
-                reports_generated.append(saved_filename)
-                
-                if not args.quiet:
-                    print(f"   📄 {format_type.upper()} report saved to: {saved_filename}")
+
+                # Create output directory
+                import os
+                output_dir = "output"
+                os.makedirs(output_dir, exist_ok=True)
+
+                # Full filepath
+                filepath = os.path.join(output_dir, filename)
+
+                try:
+                    with open(filepath, 'w', encoding='utf-8') as f:
+                        f.write(report_content)
+                    reports_generated.append(filepath)
+
+                    if not args.quiet:
+                        print(f"   📄 {format_type.upper()} report saved to: {filepath}")
+                except Exception as e:
+                    print(f"❌ Failed to save {format_type} report: {e}")
             else:
                 # Print markdown report to console if no output file specified
                 if format_type == 'markdown':

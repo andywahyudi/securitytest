@@ -2,7 +2,7 @@ import json
 import csv
 import html
 from datetime import datetime
-from .reporter import Reporter
+from modules.reporter import Reporter
 
 class EnhancedReporter(Reporter):
     def __init__(self):
@@ -420,6 +420,14 @@ def generate_html_report(self, results, target_url, auth_info=None):
     def save_report(self, report_content, filename, format_type='markdown'):
         """Save report to file with appropriate extension"""
         import os
+        from pathlib import Path
+
+        # Create output directory if it doesn't exist
+        output_dir = Path("output")
+        output_dir.mkdir(exist_ok=True)
+    
+        # Full path for the report file
+        filepath = output_dir / filename
         
         # Determine file extension based on format
         extensions = {
@@ -430,12 +438,12 @@ def generate_html_report(self, results, target_url, auth_info=None):
         }
         
         # Add extension if not present
-        if not any(filename.endswith(ext) for ext in extensions.values()):
-            filename += extensions.get(format_type, '.txt')
+        if not any(filepath.endswith(ext) for ext in extensions.values()):
+            filepath += extensions.get(format_type, '.txt')
         
         try:
-            with open(filename, 'w', encoding='utf-8') as f:
+            with open(filepath, 'w', encoding='utf-8') as f:
                 f.write(report_content)
-            return filename
+            return filepath
         except Exception as e:
             raise Exception(f"Failed to save report: {e}")
