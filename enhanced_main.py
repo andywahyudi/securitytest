@@ -9,6 +9,7 @@ import json
 import logging
 import time
 from pathlib import Path
+from datetime import datetime
 from modules.xss_scanner import XSSScanner
 from modules.csrf_scanner import CSRFScanner
 from modules.crawler import WebCrawler
@@ -418,7 +419,8 @@ Authentication Examples:
             
             # Save report if output specified
             if args.output:
-                filename = f"{args.output}.{format_type}" if format_type != 'markdown' else f"{args.output}.md"
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                filename = f"{args.output}_{timestamp}.{format_type}" if format_type != 'markdown' else f"{args.output}_{timestamp}.md"
 
                 # Create output directory
                 import os
